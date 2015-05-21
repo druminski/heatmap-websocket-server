@@ -2,14 +2,14 @@ package hello.api;
 
 public class LocalizationMessage {
     private String name;
-    private String province;
-    private double lat;
-    private double lng;
+    private String lat;
+    private String lng;
     private double count;
 
-    public LocalizationMessage(String name, String province, double lat, double lng, double count) {
+    public LocalizationMessage(){}
+    
+    public LocalizationMessage(String name, String province, String lat, String lng, double count) {
         this.name = name;
-        this.province = province;
         this.lat = lat;
         this.lng = lng;
         this.count = count;
@@ -19,19 +19,27 @@ public class LocalizationMessage {
         return name;
     }
 
-    public String getProvince() {
-        return province;
-    }
-
-    public double getLat() {
+    public String getLat() {
         return lat;
     }
 
-    public double getLng() {
+    public String getLng() {
         return lng;
+    }
+
+    @Override
+    public String toString() {
+        return "LocalizationMessage{" +
+                "name='" + name + '\'' +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                ", count=" + count +
+                '}';
     }
 
     public double getCount() {
         return count;
     }
+    
+    
 }
