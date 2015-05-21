@@ -29,6 +29,8 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-websocket")
     compile("org.springframework:spring-messaging")
+    compile 'com.google.guava:guava:18.0'
+
     testCompile("junit:junit")
 }
 

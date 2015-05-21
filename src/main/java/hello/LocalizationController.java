@@ -14,11 +14,11 @@ import java.util.List;
 public class LocalizationController {
     @Autowired
     LocalizationsMerger merger;
-    @RequestMapping(value = "/localization", 
-            method = RequestMethod.POST, 
-            consumes = "application/json")
+
+    @RequestMapping(value = "/localization", method = RequestMethod.POST, consumes = "application/json")
     public @ResponseBody String receive(@RequestBody List<LocalizationMessage> messages) {
         merger.merge(messages);
         return "ok";
     }
+
 }
