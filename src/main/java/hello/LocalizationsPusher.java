@@ -7,6 +7,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.SubscribableChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.support.ExecutorSubscribableChannel;
 import org.springframework.stereotype.Component;
@@ -34,36 +35,28 @@ public class LocalizationsPusher {
 
     @PostConstruct
     public void start() {
-//        scheduledExecutorService.scheduleWithFixedDelay(() -> executorSubscribableChannel.send(new Message<List<LocalizationMessage>>() {
-//            @Override
-//            public List<LocalizationMessage> getPayload() {
-//                return merger.takeSnapshot();
-//            }
-//
-//            @Override
-//            public MessageHeaders getHeaders() {
-//                return new MessageHeaders(null);
-//            }
-//        }), 1000, 1000, TimeUnit.MILLISECONDS);
+        SimpMessagingTemplate template = new SimpMessagingTemplate(messageChannel);
+        template.setDefaultDestination("/topic/greetings");
 
         scheduledExecutorService.scheduleAtFixedRate(() -> {
-            System.out.println("sending message");
             try {
-                messageChannel.send(new Message<HelloMessage>() {
+                template.send(new Message<byte[]>() {
                     @Override
-                    public HelloMessage getPayload() {
-                        return merger.get();
+                    public byte[] getPayload() {
+                        return merger.takeSnapshotAsBytes();
                     }
 
                     @Override
                     public MessageHeaders getHeaders() {
                         HashMap<String, Object> map = new HashMap<>();
-                        map.put("", "");
+                        map.put("destination", "/topic/greetings");
+                        map.put("content-type", "application/json;charset=UTF-8");
+
                         return new MessageHeaders(map);
                     }
                 });
             } catch (RuntimeException e) {
-                System.out.println(e);
+                System.err.println(e);
             }
         }, 5000, 5000, TimeUnit.MILLISECONDS);
 
